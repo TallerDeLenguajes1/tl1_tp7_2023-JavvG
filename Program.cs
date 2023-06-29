@@ -1,97 +1,198 @@
-﻿using EspacioCalculadora;
+﻿using EspacioEmpleados;
 
-Calculadora calculadora = new Calculadora();        // Se crea un nuevo objeto/instancia "calculadora" de la clase "Calculadora"
+int cantidadEmpleados = 3;
 
-int flag = 0;
+Empleados[] arregloEmpleados = new Empleados[cantidadEmpleados];        // Declaración de un arreglo del tipo clase "Empleados"
 
-string? repeat = "Y";
+for(int i=0; i<arregloEmpleados.Length; i++) {
 
-Console.WriteLine("\n\t\t --- CALCULADORA ---");
+    arregloEmpleados[i] = new Empleados();      // Importante (!)
 
-do {
+    Console.Write($"\n > Ingrese el nombre del empleado nro. {i+1}: ");
+    string? nombre = Console.ReadLine();
 
-    Console.WriteLine("\n ¿Qué operación desea realizar?");
-    Console.Write("\n [1] - Sumar \n [2] - Restar \n [3] - Multiplicar \n [4] - Dividir \n [5] - Salir del programa \n\n >> Su respuesta: " );
+    arregloEmpleados[i].Nombre = nombre;
 
-    string? input1 = Console.ReadLine();
+    Console.Write($"\n\n > Ingrese el apellido del empleado nro. {i+1}: ");
+    string? apellido = Console.ReadLine();
 
-    int option = 0;     // Se inicializa la variable para evitar errores
+    arregloEmpleados[i].Apellido = apellido;
 
-    while(!int.TryParse(input1, out option) || option < 0 || option > 5) {      // Controla que la cadena ingresada pueda convertirse efectivamente a un número entero comprendido entre 1 y 5
+    Console.Write($"\n\n > Ingrese la fecha de nacimiento del empleado nro. {i+1} (formato dd/mm/yyyy): ");
+    string? fechaNacimientoStr = Console.ReadLine();
 
-        Console.Write("\n\n (!) Ha ingresado una opción inválida.\n > Ingrese nuevamente: ");
-        input1 = Console.ReadLine();
+    DateTime fechaNacimiento;
 
-    }
+    while(!DateTime.TryParse(fechaNacimientoStr, out fechaNacimiento)) {        // Convierte un string en una fecha (formato dd/mm/yyyy)
 
-    double numero = 0;
-
-    if(option != 5) {
-
-        Console.Write("\n > Ingrese un número (las operaciones se realizan de forma encadenada sobre un mismo resultado): ");
-        input1 = Console.ReadLine();
-
-        while(!double.TryParse(input1, out numero)) {      // Controla que la cadena ingresada pueda transformarse efectivamente a un número real
-            
-            Console.Write("\n\n (!) Ha ingresado un caracter inválido.\n > Ingrese un número: ");
-            input1 = Console.ReadLine();
-
-        }
+        Console.Write("\n (!) Ingresó un formato inválido. \n > Ingrese nuevamente (dd/mm/yyyy): ");
+        fechaNacimientoStr = Console.ReadLine();
 
     }
 
-    if(flag == 0 && option != 5) {
-        Console.WriteLine("\n (!) El valor inicial de la calculadora es 0, por lo que la primera operación se calculará de forma encadenada respecto a ese valor y al número que usted ingrese");
+    arregloEmpleados[i].FechaNacimiento = fechaNacimiento;
+
+    Console.Write($"\n\n > Seleccione el estado civil del empleado nro. {i+1}: \n\n [1] - Soltero/a \n [2] - Casado/a \n [3] - Divorciado/a \n [4] - Viudo/a \n\n >> Su respuesta: ");
+    string? input = Console.ReadLine();
+    int option = 0;
+
+    while(!int.TryParse(input, out option) || option < 1 || option > 4) {
+
+        Console.Write("\n\n (!) Ha ingresado una opción inválida. \n > Ingrese nuevamente: ");
+        input = Console.ReadLine();
+
+    }
+
+    char estadoCivil = 'X';
+
+    switch(option) {
+
+        case 1:
+            estadoCivil = 'S';
+        break;
+
+        case 2:
+            estadoCivil = 'C';
+        break;
+
+        case 3:
+            estadoCivil = 'D';
+        break;
+
+        case 4:
+            estadoCivil = 'V';
+        break;
+
+    }
+
+    arregloEmpleados[i].EstadoCivil = estadoCivil;
+
+    Console.Write($"\n\n > Seleccione el género del empleado nro. {i+1} (F o M): ");
+    string? genero = Console.ReadLine();
+
+    while(genero != "f" && genero != "F" && genero != "m" && genero != "M") {
+
+        Console.Write("\n\n (!) Ha ingresado una opción inválida. \n > Ingrese nuevamente: ");
+        genero = Console.ReadLine();
+
+    }
+
+    if(genero == "f" || genero == "F") {
+        arregloEmpleados[i].Genero = 'F';
+    }
+    else {
+        arregloEmpleados[i].Genero = 'M';
+    }
+
+    Console.Write($"\n\n > Ingrese la fecha de ingreso del empleado nro. {i+1} (formato dd/mm/yyyy): ");
+    string? fechaIngresoStr = Console.ReadLine();
+
+    DateTime fechaIngreso;
+
+    while(!DateTime.TryParse(fechaIngresoStr, out fechaIngreso)) {        // Convierte un string en una fecha (formato dd/mm/yyyy)
+
+        Console.Write("\n (!) Ingresó un formato inválido. \n > Ingrese nuevamente (dd/mm/yyyy): ");
+        fechaIngresoStr = Console.ReadLine();
+
+    }
+
+    arregloEmpleados[i].FechaIngreso = fechaIngreso;
+
+    Console.Write($"\n\n > Ingrese el sueldo básico del empleado nro. {i+1}: $");
+    string? sueldoBasicoStr = Console.ReadLine();
+
+    double sueldoBasico;
+
+    while(!double.TryParse(sueldoBasicoStr, out sueldoBasico)) {
+
+        Console.Write("\n\n (!) Ingresó algo inválido. \n Ingrese nuevamente: ");
+        sueldoBasicoStr = Console.ReadLine();
+
+    }
+
+    arregloEmpleados[i].SueldoBasico = sueldoBasico;
+
+    Console.Write($"\n\n > Seleccione el cargo que tiene el empleado {i+1}: \n\n");
+    Console.WriteLine($"[1] - {Cargos.Auxiliar}");
+    Console.WriteLine($"[2] - {Cargos.Administrativo}");
+    Console.WriteLine($"[3] - {Cargos.Ingeniero}");
+    Console.WriteLine($"[4] - {Cargos.Especialista}");
+    Console.WriteLine($"[5] - {Cargos.Investigador}");
+
+    Console.Write("\n\n >> Su respuesta: ");
+    input = Console.ReadLine();
+
+    int option1 = 0;
+
+    while(!int.TryParse(input, out option1) || option1 < 1 || option1 > 5) {
+
+        Console.Write("\n\n (!) Ingresó una opción inválida. \n > Ingrese nuevamente: ");
+        input = Console.ReadLine();
+
     }
 
     switch(option) {
 
         case 1:
-            calculadora.Sumar(numero);
+            arregloEmpleados[i].Cargo = Cargos.Auxiliar;
         break;
 
         case 2:
-            calculadora.Restar(numero);
+            arregloEmpleados[i].Cargo = Cargos.Administrativo;
         break;
 
         case 3:
-            calculadora.Multiplicar(numero);
+            arregloEmpleados[i].Cargo = Cargos.Ingeniero;
         break;
 
         case 4:
-            calculadora.Dividir(numero);
+            arregloEmpleados[i].Cargo = Cargos.Especialista;
         break;
 
         case 5:
-            calculadora.Limpiar();
+            arregloEmpleados[i].Cargo = Cargos.Investigador;
         break;
 
     }
 
-    if(option != 5) {
-        Console.Write("\n\n >> Este es el resultado: " + calculadora.Resultado);
-        Console.Write("\n\n > ¿Desea realizar otra operación consecutiva? \n >> Su respuesta [S] - [N]: ");
-        repeat = Console.ReadLine();
+}
 
-        while(repeat != "Y" && repeat != "y" && repeat != "S" && repeat != "s" && repeat != "N" && repeat != "n") {
+Console.ReadLine();
 
-            Console.Write("\n\n (!) Ha ingresado un caracter inválido.\n > Ingrese nuevamente: ");
-            repeat = Console.ReadLine();
+double montoTotalSalarios = 0;
 
-        }
+for(int i=0; i<arregloEmpleados.Length; i++) {
 
-        if(repeat == "Y" || repeat == "y" || repeat == "S" || repeat == "s") {
-            flag = 1;
-        }
+    montoTotalSalarios += arregloEmpleados[i].calcularSalario(arregloEmpleados[i].calcularAntigüedad());
+
+}
+
+Console.Write("\n\n >> Monto total en concepto de salarios: $" + montoTotalSalarios);
+
+Console.ReadLine();
+
+int empleado = 0;
+
+for(int i=0; i<arregloEmpleados.Length; i++) {
+
+    if(arregloEmpleados[i].calcularAñosRestantesJubilacion(arregloEmpleados[i].calcularEdad()) < arregloEmpleados[empleado].calcularAñosRestantesJubilacion(arregloEmpleados[empleado].calcularEdad())) {
+        empleado = i;
     }
-    else {
-        repeat = "N";
-    }
 
-    
+}
 
-} while(repeat == "Y" || repeat == "y" || repeat == "S" || repeat == "s");
+Console.Write("\n\n (!) Estos son los datos del empleado más próximo a jubilarse: \n");
 
-Console.WriteLine("\n\n Fin del programa (!)");
+Console.Write($"\n\n >> Nombre del empleado:  {arregloEmpleados[empleado].Nombre} {arregloEmpleados[empleado].Apellido}");
+Console.Write($"\n\n >> Fecha de nacimiento: {arregloEmpleados[empleado].FechaNacimiento}");
+Console.Write($"\n\n >> Estado civil: {arregloEmpleados[empleado].EstadoCivil}");
+Console.Write($"\n\n >> Género: {arregloEmpleados[empleado].Genero}");
+Console.Write($"\n\n >> Fecha de ingreso: {arregloEmpleados[empleado].FechaIngreso}");
+Console.Write($"\n\n >> Sueldo básico: ${arregloEmpleados[empleado].SueldoBasico}");
+Console.Write($"\n\n >> Cargo: {arregloEmpleados[empleado].Cargo}");
+Console.Write($"\n\n >> Antigüedad: {arregloEmpleados[empleado].calcularAntigüedad()} años");
+Console.Write($"\n\n >> Edad: {arregloEmpleados[empleado].calcularEdad()} años");
+Console.Write($"\n\n >> Años restantes hasta jubilación: {arregloEmpleados[empleado].calcularAñosRestantesJubilacion(arregloEmpleados[empleado].calcularEdad())} años");
+Console.Write($"\n\n >> Salario: ${arregloEmpleados[empleado].calcularSalario(arregloEmpleados[empleado].calcularAntigüedad())}");
 
 Console.ReadLine();
